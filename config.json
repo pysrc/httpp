@@ -1,0 +1,16 @@
+[
+    {
+        "port": 18900,
+        "addr": "http://127.0.0.1:8080",
+        "users": [
+            {
+                "name": "root",
+                "password": "$2b$12$knfPHgT/GUF2sMWZ53zLLeQyhMqpvsLt7sqQ7DQ2we2YjCbxtv9C2"
+            },
+            {
+                "name": "admin",
+                "password": "$2b$12$qQ32KLi2Fh/XcjVFUJeIveDIiQ5OCG2HxYNc1tUCyn7nLz.JdazQi"
+            }
+        ]
+    }
+]
