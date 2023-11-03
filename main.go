@@ -95,6 +95,7 @@ func Job() {
 }
 
 func RunProxy(cfg *WebConfig) {
+	server_uuid := Uuid()
 	user_pass_map := make(map[string]string)
 	for _, user := range cfg.Users {
 		user_pass_map[user.Name] = user.Password
@@ -131,7 +132,7 @@ func RunProxy(cfg *WebConfig) {
 							Name:      name,
 							Expires:   expires.Unix(),
 						}
-						cookie_httpp_session_id := http.Cookie{Name: "httpp_session_id", Value: httpp_session_id, Expires: expires}
+						cookie_httpp_session_id := http.Cookie{Name: server_uuid, Value: httpp_session_id, Expires: expires}
 						http.SetCookie(w, &cookie_httpp_session_id)
 						http.Redirect(w, r, "/", http.StatusSeeOther)
 					} else {
@@ -148,7 +149,7 @@ func RunProxy(cfg *WebConfig) {
 			}
 		}
 		// 检查cookie
-		cookie, err := r.Cookie("httpp_session_id")
+		cookie, err := r.Cookie(server_uuid)
 		if err != nil {
 			// 没登录
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
