@@ -123,18 +123,16 @@ func RunProxy(cfg *WebConfig) {
 				if hashedPassword, ok := user_pass_map[name]; ok {
 					if Verify(hashedPassword, password) {
 						// 登录成功
-						var session_id = Uuid()
+						var httpp_session_id = Uuid()
 						// 会话过期时间
 						var expires = time.Now().Add(SessionExpires)
-						sessions[session_id] = &UserSession{
-							SessionId: session_id,
+						sessions[httpp_session_id] = &UserSession{
+							SessionId: httpp_session_id,
 							Name:      name,
 							Expires:   expires.Unix(),
 						}
-						cookie_session_id := http.Cookie{Name: "session_id", Value: session_id, Expires: expires}
-						http.SetCookie(w, &cookie_session_id)
-						cookie_username := http.Cookie{Name: "username", Value: name, Expires: expires}
-						http.SetCookie(w, &cookie_username)
+						cookie_httpp_session_id := http.Cookie{Name: "httpp_session_id", Value: httpp_session_id, Expires: expires}
+						http.SetCookie(w, &cookie_httpp_session_id)
 						http.Redirect(w, r, "/", http.StatusSeeOther)
 					} else {
 						http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -150,18 +148,18 @@ func RunProxy(cfg *WebConfig) {
 			}
 		}
 		// 检查cookie
-		cookie, err := r.Cookie("session_id")
+		cookie, err := r.Cookie("httpp_session_id")
 		if err != nil {
 			// 没登录
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		session_id := cookie.Value
-		if session, ok := sessions[session_id]; ok {
+		httpp_session_id := cookie.Value
+		if session, ok := sessions[httpp_session_id]; ok {
 			// 校验session是否过期
 			if session.Expires < time.Now().Unix() {
 				// 会话过期
-				delete(sessions, session_id)
+				delete(sessions, httpp_session_id)
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
 				return
 			} else {
