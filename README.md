@@ -24,9 +24,13 @@
 ```
 
 port: 监听端口
+
 addr：代理的地址
+
 users：用户信息列表
+
 users/name：用户名
+
 users/password：经过bcrypt加密后的密码，参考下面
 
 # 生成bcrypt加密后的密码
