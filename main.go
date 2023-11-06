@@ -94,7 +94,7 @@ func Job() {
 	}
 }
 
-func RunProxy(cfg *WebConfig) {
+func RunProxy(cfg WebConfig) {
 	mux := http.NewServeMux()
 	server_uuid := Uuid()
 	user_pass_map := make(map[string]string)
@@ -225,7 +225,7 @@ func main() {
 	}
 	// 创建一个代理服务器
 	for _, cfg := range configs {
-		go RunProxy(&cfg)
+		go RunProxy(cfg)
 	}
 	// 创建一个通道来接收信号
 	sigChan := make(chan os.Signal, 1)
