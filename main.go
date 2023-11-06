@@ -95,6 +95,7 @@ func Job() {
 }
 
 func RunProxy(cfg *WebConfig) {
+	mux := http.NewServeMux()
 	server_uuid := Uuid()
 	user_pass_map := make(map[string]string)
 	for _, user := range cfg.Users {
@@ -111,7 +112,7 @@ func RunProxy(cfg *WebConfig) {
 	}
 
 	// 启动代理服务器
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/login" {
 			if r.Method == "GET" {
 				// 获取登录页
@@ -174,7 +175,7 @@ func RunProxy(cfg *WebConfig) {
 	})
 
 	fmt.Printf("Listen in %d to %s\n", cfg.Port, cfg.Addr)
-	http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", cfg.Port), mux)
 }
 
 func Verify(hashedPassword string, enteredPassword string) bool {
